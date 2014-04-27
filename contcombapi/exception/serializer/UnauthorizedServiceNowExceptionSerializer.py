@@ -3,10 +3,10 @@
 @author:: Bruno Zeraik
 '''
 
-from exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
+from contcombapi.exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
 from rest_framework import serializers
 from rest_framework.response import Response
-from exception.UnauthorizedServiceNowException import UnauthorizedServiceNowException
+from contcombapi.exception.UnauthorizedServiceNowException import UnauthorizedServiceNowException
 
 class UnauthorizedServiceNowExceptionSerializer(BaseExceptionSerializer):
     

@@ -3,10 +3,10 @@
 @author:: Bruno Zeraik
 '''
 
-from db.transaction import response_rollback
-from exception.ObjectDoesNotExistException import \
+from contcombapi.db.transaction import response_rollback
+from contcombapi.exception.ObjectDoesNotExistException import \
     ObjectDoesNotExistException
-from exception.serializer.BaseExceptionSerializer import \
+from contcombapi.exception.serializer.BaseExceptionSerializer import \
     BaseExceptionSerializer
 from rest_framework import serializers
 

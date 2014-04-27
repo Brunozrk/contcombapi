@@ -3,10 +3,10 @@
 @author:: Bruno Zeraik
 '''
 
-from exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
+from contcombapi.exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
 from rest_framework import serializers
-from db.transaction import response_rollback
-from exception.ServiceException import ServiceException
+from contcombapi.db.transaction import response_rollback
+from contcombapi.exception.ServiceException import ServiceException
 
 class ServiceExceptionSerializer(BaseExceptionSerializer):
     

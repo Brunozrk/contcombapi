@@ -3,8 +3,8 @@
 @author:: Bruno Zeraik
 '''
 
-from exception.AuthenticationException import AuthenticationException
-from exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
+from contcombapi.exception.AuthenticationException import AuthenticationException
+from contcombapi.exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
 from rest_framework import serializers
 from rest_framework.response import Response
 

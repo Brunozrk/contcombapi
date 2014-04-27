@@ -15,8 +15,10 @@ def commit_or_rollback(view_func):
     Commit or Rollback
     '''
     def _decorated(request, *args, **kwargs):
-
-        result = view_func(request, *args, **kwargs)
+        try:
+            result = view_func(request, *args, **kwargs)
+        except Exception, e:
+            print e
 
         if '"exception": true'  in result.rendered_content:
             transaction.rollback()

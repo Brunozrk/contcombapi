@@ -13,11 +13,11 @@ urlpatterns = patterns('',
    url(r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('authentication.views',
+urlpatterns += patterns('contcombapi.authentication.views',
     url(r'^generate_token/$', 'generate_token'),
 )
 
-urlpatterns += patterns('user.views',
+urlpatterns += patterns('contcombapi.user.views',
     url(r'^user/get/all/$', 'get_all'),
     url(r'^user/get/(?P<id_user>[^/]+)/$', 'get_by_pk'),
     url(r'^user/get/username/(?P<username>[^/]+)$', 'get_by_username'),
@@ -27,7 +27,7 @@ urlpatterns += patterns('user.views',
 )
 
 
-urlpatterns += patterns('contact.views',
+urlpatterns += patterns('contcombapi.contact.views',
     url(r'^contact/save$', 'save'),
     url(r'^contact/get/user$', 'get_by_user'),
     url(r'^contact/get/(?P<id_message>[^/]+)$', 'get_by_id'),

@@ -3,10 +3,10 @@
 @author:: Bruno Zeraik
 '''
 
-from exception.ValidationException import ValidationException
-from exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
+from contcombapi.exception.ValidationException import ValidationException
+from contcombapi.exception.serializer.BaseExceptionSerializer import BaseExceptionSerializer
 from rest_framework import serializers
-from db.transaction import response_rollback
+from contcombapi.db.transaction import response_rollback
 
 class ValidationExceptionSerializer(BaseExceptionSerializer):
 
