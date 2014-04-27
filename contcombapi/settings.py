@@ -3,8 +3,7 @@
 @author:: Bruno Zeraik
 '''
 
-import locale, os
-# locale.setlocale(locale.LC_ALL, 'pt_BR')
+import os
 ROOTDIR = os.path.realpath(os.path.dirname(__file__))
 
 from decouple import config
@@ -14,6 +13,8 @@ BASE_DIR = Path(__file__).parent
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
+print DEBUG
+print TEMPLATE_DEBUG
 
 IsBrowsableAPIRenderer = False
 

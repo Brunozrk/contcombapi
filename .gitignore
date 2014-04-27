@@ -12,7 +12,8 @@ Scripts
 *~
 *.sqlite3
 .DS_Store
-
+.env
+contcombapi/staticfiles
 
 .project
 .pydevproject
