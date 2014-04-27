@@ -7,11 +7,12 @@ import locale, os
 # locale.setlocale(locale.LC_ALL, 'pt_BR')
 ROOTDIR = os.path.realpath(os.path.dirname(__file__))
 
-import dj_database_url    
+from decouple import config
+from dj_database_url import parse as db_url
 from unipath import Path
 BASE_DIR = Path(__file__).parent
 
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
 IsBrowsableAPIRenderer = False
@@ -23,7 +24,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-      'default': dj_database_url.config(default='sqlite:///' + BASE_DIR.child('db.sqlite3'))
+      'default': config(
+                        'DATABASE_URL',
+                        default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
+                        cast=db_url),
 #     'default': {
 #             'ENGINE': 'django.db.backends.mysql',
 #             'HOST': 'localhost',
@@ -36,7 +40,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '.herokuapp.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -97,7 +101,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '!fycpfh_jls!!l-)!)3@*kywa(i5#vr2s036v#eeas+^-(@2pw'
+SECRET_KEY = config('SECRET_KEY')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
