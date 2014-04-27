@@ -23,18 +23,18 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-#       'default': config(
-#                         'DATABASE_URL',
-#                         default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
-#                         cast=db_url),
-    'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': 'localhost',
-            'NAME': 'contcomb',
-            'USER': 'root',
-            'PASSWORD': '',
-            'OPTIONS': {"init_command": "SET storage_engine=INNODB"}
-    }
+    'default': config(
+                      'DATABASE_URL',
+                      default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
+                      cast=db_url),
+#     'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'HOST': 'localhost',
+#             'NAME': 'contcomb',
+#             'USER': 'root',
+#             'PASSWORD': '',
+#             'OPTIONS': {"init_command": "SET storage_engine=INNODB"}
+#     }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
