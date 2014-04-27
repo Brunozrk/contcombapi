@@ -15,12 +15,9 @@ def log(view_func):
     '''
     def _decorated(request, *args, **kwargs):
 
-        try:
-            post_data = request.body
-            post_data = re.sub(r'password=(.*?)&', 'password=****&', post_data)
-            logger.debug(u'Start of the request[%s] for URL[%s] with DATA[%s].' % (request.method, request.path, post_data))
-        except:
-            pass
+        post_data = request.body
+        post_data = re.sub(r'password=(.*?)&', 'password=****&', post_data)
+        logger.debug(u'Start of the request[%s] for URL[%s] with DATA[%s].' % (request.method, request.path, post_data))
 
         return view_func(request, *args, **kwargs)
 

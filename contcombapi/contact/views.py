@@ -62,7 +62,7 @@ def save(request):
 @permission_classes((IsAuthenticated,))
 @renderer_classes(Renderer)
 def get_by_user(request):
-    
+    logger.info("buceta roxa")
     response = Contact.objects.get_messages_by_user(request.user)
     
     return response_commit({'messages': response})
@@ -80,7 +80,6 @@ def get_by_id(request, id_message):
     response = Contact.objects.get_by_pk(pk=id_message)
     
     return response_commit(model_to_dict(response))
-
 
 
 @log

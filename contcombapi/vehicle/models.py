@@ -5,6 +5,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from contcombapi.user.models import User
+from contcombapi.vehicle.managers import VehicleManager
 
 
 class Mark(models.Model):
@@ -40,10 +41,12 @@ class Model(models.Model):
 class Vehicle(models.Model):
 
     id = models.AutoField(primary_key=True,)
-    motor = models.CharField(_('motor'), blank=False, max_length=10)
-    manufactured = models.IntegerField(_('ano de fabricação'), blank=False, max_length=4)
+    motor = models.CharField(_(u'motor'), blank=False, max_length=10)
+    manufactured = models.IntegerField(_(u'ano de fabricação'), blank=False, max_length=4)
     model = models.ForeignKey('Model', null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    objects = VehicleManager()
 
     def __unicode__(self):
         return self.model.name

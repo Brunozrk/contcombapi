@@ -18,6 +18,7 @@ class ModelAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'mark', 'valid')
     search_fields = ('name', 'mark__name')
+    list_filter = ['valid']
 
 
 class VehicleAdmin(admin.ModelAdmin):

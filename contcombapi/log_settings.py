@@ -3,11 +3,10 @@
 @author:: Bruno Zeraik
 '''
 
-import os
+from django.conf import settings
 LOG_LEVEL = 'INFO'
 LOG_SHOW_SQL = False
 
-ROOTDIR = os.path.realpath(os.path.dirname(__file__))
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -31,7 +30,7 @@ LOGGING = {
         'logger': {
             'level': LOG_LEVEL,
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': ROOTDIR + "/logs/loggerfile",
+            'filename': settings.BASE_DIR + "/logs/loggerfile",
             'backupCount': 2,
             'formatter': 'standard',
         },
@@ -51,12 +50,32 @@ LOGGING = {
             'level': LOG_LEVEL,
             'propagate': True,
         },
-        'authentication': {
+        'contcombapi.decorator': {
+            'handlers': ['logger'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        }, 
+        'contcombapi.db': {
+            'handlers': ['logger'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        }, 
+        'contcombapi.authentication': {
             'handlers': ['logger'],
             'level': LOG_LEVEL,
             'propagate': True,
         },
-        'user': {
+        'contcombapi.user': {
+            'handlers': ['logger'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+        'contcombapi.contact': {
+            'handlers': ['logger'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+        'contcombapi.vehicle': {
             'handlers': ['logger'],
             'level': LOG_LEVEL,
             'propagate': True,

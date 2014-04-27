@@ -19,7 +19,7 @@ class SaveSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6, max_length=100, required=True)
     confirm_password = serializers.CharField(min_length=6, max_length=100, required=True)
 
-    def validate_onfirm_password(self, attrs, source):
+    def validate_confirm_password(self, attrs, source):
         if not self.object:
             password = attrs['password']
             confirm_password = attrs[source]

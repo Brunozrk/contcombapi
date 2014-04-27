@@ -13,8 +13,6 @@ BASE_DIR = Path(__file__).parent
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
-print DEBUG
-print TEMPLATE_DEBUG
 
 IsBrowsableAPIRenderer = False
 
@@ -25,23 +23,24 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-      'default': config(
-                        'DATABASE_URL',
-                        default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
-                        cast=db_url),
-#     'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'HOST': 'localhost',
-#             'NAME': 'contcomb',
-#             'USER': 'root',
-#             'PASSWORD': '',
-#             'OPTIONS': {"init_command": "SET storage_engine=INNODB"}
-#     }
+#       'default': config(
+#                         'DATABASE_URL',
+#                         default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
+#                         cast=db_url),
+    'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'localhost',
+            'NAME': 'contcomb',
+            'USER': 'root',
+            'PASSWORD': '',
+            'OPTIONS': {"init_command": "SET storage_engine=INNODB"}
+    }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '.herokuapp.com']
+#ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -164,8 +163,8 @@ REST_FRAMEWORK = {
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-# import log_settings
-# LOGGING = log_settings.LOGGING
+import log_settings
+LOGGING = log_settings.LOGGING
 
 TEST_RUNNER = 'django_pytest.test_runner.TestRunner'
 
