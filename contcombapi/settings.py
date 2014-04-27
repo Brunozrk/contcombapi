@@ -4,7 +4,7 @@
 '''
 
 import locale, os
-locale.setlocale(locale.LC_ALL, 'pt_BR')
+# locale.setlocale(locale.LC_ALL, 'pt_BR')
 ROOTDIR = os.path.realpath(os.path.dirname(__file__))
 
 import dj_database_url    
