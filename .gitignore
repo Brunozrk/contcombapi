@@ -18,3 +18,5 @@ loggerfile
 
 .project
 .pydevproject
+.settings
+settings_local.py

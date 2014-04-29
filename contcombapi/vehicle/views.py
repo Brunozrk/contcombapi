@@ -18,6 +18,9 @@ from contcombapi.vehicle.serializers import SaveSerializer
 from django.forms.models import model_to_dict
 from contcombapi.exception.serializer.ValidationExceptionSerializer import ValidationExceptionSerializer
 from contcombapi.exception.serializer.ServiceExceptionSerializer import ServiceExceptionSerializer
+from contcombapi.utility import clone
+from django.core.exceptions import ObjectDoesNotExist
+from contcombapi.messages import error_messages
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +51,40 @@ def save(request):
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)
 
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['POST'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def update(request):
+
+    try:
+
+        vehicle = Vehicle.objects.get_by_pk(request.DATA.get('car_id'))
+
+        serializer = SaveSerializer(clone(vehicle), data=request.DATA)
+
+        if serializer.is_valid():
+
+            vehicle = serializer.object
+            vehicle.save()
+
+            return response_commit(model_to_dict(vehicle))
+
+        else:
+            return ValidationExceptionSerializer.response_exception(serializer.errors)
+
+    except ObjectDoesNotExist, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(error_messages.get("invalid") % u"Veículo")
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
+
+
 @log
 @commit_manually
 @commit_or_rollback
@@ -56,7 +93,47 @@ def save(request):
 @permission_classes((IsAuthenticated,))
 @renderer_classes(Renderer)
 def get_by_user(request):
-    
+    logger.info("aqa")
     response = Vehicle.objects.get_vehicles_by_user(request.user)
     
     return response_commit({'cars': response})
+
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['GET'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def get_by_id(request, id_car):
+
+    try:
+        vehicle = Vehicle.objects.get_vehicle_by_id_and_user(id_car, request.user)
+        
+        return response_commit({"id": vehicle.pk, 
+                                "model": vehicle.model.name, 
+                                "motor": vehicle.motor,
+                                "manufactured": vehicle.manufactured})
+    
+    except ObjectDoesNotExist, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(error_messages.get("invalid") % u"Veículo")
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
+
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['DELETE'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def delete(request, id_car):
+    
+    contact = Vehicle.objects.get(pk=id_car, user=request.user)
+    contact.delete()
+    
+    return response_commit()

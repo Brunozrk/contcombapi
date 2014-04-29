@@ -27,7 +27,7 @@ class Model(models.Model):
     id = models.AutoField(primary_key=True,)
     name = models.CharField(_('nome'), max_length=100, blank=False)
     mark = models.ForeignKey('Mark', null=True, on_delete=models.CASCADE)
-    valid = models.BooleanField(default=False)
+    valid = models.BooleanField(_(u'válido'), default=False)
 
     def __unicode__(self):
         return self.name

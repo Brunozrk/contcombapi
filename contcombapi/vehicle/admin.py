@@ -27,7 +27,7 @@ class VehicleAdmin(admin.ModelAdmin):
     search_fields = ('user__name', 'model__name', 'motor', 'manufactured', 'model__mark__name')
 
     def mark(self, obj):
-        return obj.model.mark.name
+        return obj.model.mark.name if obj.model.mark else ""
 
     mark.short_description = _('Marca')
 

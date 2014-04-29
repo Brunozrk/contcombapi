@@ -26,7 +26,11 @@ class SaveSerializer(serializers.Serializer):
         """
         if instance:
             # Update existing instance
-            instance.model = attrs.get('model', instance.model)
+            model = attrs.get('model', instance.model)
+            if type(model) is int:
+                instance.model = model
+            else:
+                instance.model, _ = Model.objects.get_or_create(name=model.upper())
             instance.motor = attrs.get('motor', instance.motor)
             instance.manufactured = attrs.get('manufactured', instance.manufactured)
 

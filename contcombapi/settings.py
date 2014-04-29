@@ -27,14 +27,6 @@ DATABASES = {
                       'DATABASE_URL',
                       default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
                       cast=db_url),
-#     'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'HOST': 'localhost',
-#             'NAME': 'contcomb',
-#             'USER': 'root',
-#             'PASSWORD': '',
-#             'OPTIONS': {"init_command": "SET storage_engine=INNODB"}
-#     }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -170,3 +162,11 @@ TEST_RUNNER = 'django_pytest.test_runner.TestRunner'
 
 # SET DEFAULT TOKEN TIMEOUT
 DEFAULT_TIMEOUT = 15
+
+# ===================================================================
+# Load settings_local.py if exists
+# ===================================================================
+try:
+    execfile(os.path.join(ROOTDIR, 'settings_local.py'), globals(), locals())
+except:
+    pass
