@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 class SaveSerializer(serializers.Serializer):
 
-    model = serializers.CharField(min_length=3, max_length=100, required=True)
-    motor = serializers.CharField(min_length=3, max_length=100, required=True)
+    model = serializers.CharField(min_length=2, max_length=100, required=True)
+    motor = serializers.CharField(min_length=2, max_length=100, required=True)
     manufactured = serializers.IntegerField(min_value=1970, max_value=(date.today().year + 1))
     
     def restore_object(self, attrs, instance=None):

@@ -4,7 +4,7 @@
 '''
 
 from contcombapi.authentication.authentication import BasicAuthentication
-from contcombapi.vehicle.models import Vehicle
+from contcombapi.vehicle.models import Vehicle, Model
 from contcombapi.db.transaction import response_commit
 from contcombapi.decorator.Log import log
 from contcombapi.decorator.Transaction import commit_or_rollback
@@ -93,11 +93,13 @@ def update(request):
 @permission_classes((IsAuthenticated,))
 @renderer_classes(Renderer)
 def get_by_user(request):
-    logger.info("aqa")
-    response = Vehicle.objects.get_vehicles_by_user(request.user)
-    
-    return response_commit({'cars': response})
-
+    try:
+        response = Vehicle.objects.get_vehicles_by_user(request.user)
+        
+        return response_commit({'cars': response})
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
 
 @log
 @commit_manually
@@ -133,7 +135,31 @@ def get_by_id(request, id_car):
 @renderer_classes(Renderer)
 def delete(request, id_car):
     
-    contact = Vehicle.objects.get(pk=id_car, user=request.user)
-    contact.delete()
+    try:
+        contact = Vehicle.objects.get(pk=id_car, user=request.user)
+        contact.delete()
+        
+        return response_commit()
+
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
     
-    return response_commit()
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['GET'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def get_models(request):
+ 
+    try:
+        models = Model.objects.filter(valid=True).values_list("name", flat=True)
+         
+        return response_commit({'models': models})
+     
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
