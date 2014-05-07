@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'contcombapi.user',
     'contcombapi.contact',
     'contcombapi.vehicle',
+    'contcombapi.reminder',
     'rest_framework',
 )
 

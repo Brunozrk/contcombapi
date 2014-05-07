@@ -49,7 +49,7 @@ class Vehicle(models.Model):
     objects = VehicleManager()
 
     def __unicode__(self):
-        return self.model.name
+        return self.model.name + ' - ' + self.user.username
 
     class Meta:
         db_table = 'vehicle'
