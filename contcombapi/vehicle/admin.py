@@ -1,3 +1,7 @@
+# -*- coding:utf-8 -*-
+'''
+@author:: Bruno Zeraik
+'''
 from django.contrib import admin
 from django.utils.translation import ugettext as _
 from contcombapi.vehicle.models import Mark, Model, Vehicle
