@@ -31,7 +31,7 @@ class Supply(models.Model):
     date = models.DateField(_('data'), blank=False)
     liters = models.FloatField(_('litros'), blank=False)
 
-    station = models.CharField(_('posto'), max_length=100, blank=False)
+    station = models.CharField(_('posto'), max_length=100, blank=True, null=True)
     fuel = models.ForeignKey(Fuel, null=False)
     total_spending = models.FloatField(_('total gasto'), blank=False)
     fuel_price = models.FloatField(_('preço do combustível'), blank=False)

@@ -19,7 +19,7 @@ class SaveSerializer(serializers.Serializer):
     date = serializers.CharField(required=True)
     liters = serializers.FloatField(required=True)
     fuel = serializers.IntegerField(required=True)
-    station = serializers.CharField(required=True, max_length=100)
+    station = serializers.CharField(required=False, max_length=100)
     fuel_price = serializers.FloatField(required=True)
     obs = serializers.CharField(required=False)
     
