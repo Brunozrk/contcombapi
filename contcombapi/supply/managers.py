@@ -14,6 +14,55 @@ class SupplyManager(BaseManager):
     '''
         Base class for managing the operations to database
     '''
+    
+    def get_details(self, vehicle_id, user):
+        supplies = self.filter_by_user_vehicle(user, vehicle_id)
+        
+        liters = 0.0
+        total_spending = 0.0
+        total_average = 0.0
+        total_average_count = 0
+        fuels_details = {}
+
+        for index in range(len(supplies)):
+            current_supply = supplies[index]
+            liters += current_supply.get('liters')
+            total_spending += current_supply.get('total_spending') if current_supply.get('total_spending') is not None else 0
+
+            average = current_supply.get('average')
+            if average is not "":
+                total_average_count += 1
+                total_average += average
+                
+                # Fuels Details
+                fuels = []
+                for j_index in range((index+1), len(supplies)):
+                    next_supply = supplies[j_index]
+                    fuels.append(next_supply.get('fuel')) 
+                    if next_supply.get('is_full') is True:
+                        break
+                key_dict = '/'.join(set(fuels))
+                fuel_values = fuels_details.get(key_dict, None)
+                average_sum = 0.0
+                count = 0
+                if fuel_values is not None:
+                    average_sum = fuel_values.get('average_sum')
+                    count = fuel_values.get('count')
+                fuels_details.update({
+                                     key_dict: 
+                                                {'average_sum': average + average_sum, 
+                                                 'count': count + 1}
+                                     })
+        
+        total_average = round(total_average / total_average_count, 2)
+        
+        for index, value in fuels_details.iteritems():
+            fuels_details.update({index: value.get('average_sum') / value.get('count')})
+
+        return {"total_spending": total_spending,
+                "liters": liters,
+                "total_average": total_average,
+                "fuels_details": fuels_details}
         
     def get_by_id_and_user(self, pk, user):
         try:
@@ -48,11 +97,12 @@ class SupplyManager(BaseManager):
             supplies_list.append({
                                   'id': supply.id,
                                   'date': supply.date.strftime("%d/%m/%Y"),
-                                  'liters': str(supply.liters) + "L",
-                                  'odometer': str(supply.odometer) + " Km",
+                                  'liters': supply.liters,
+                                  'odometer': supply.odometer,
                                   'is_full': supply.is_full,
-                                  'average': str(average) + " Km/L" if average else "",
-                                  'fuel': supply.fuel.name
+                                  'average': average if average else "",
+                                  'fuel': supply.fuel.name,
+                                  'total_spending': supply.total_spending,
                                   })
 
         # Reverse list
