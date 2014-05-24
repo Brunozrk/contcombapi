@@ -15,6 +15,36 @@ class SupplyManager(BaseManager):
         Base class for managing the operations to database
     '''
     
+    def get_detail_equal_vehicles(self, equal_vehicles):
+        total_average = 0.0
+        total_average_count = 0
+        fuels_details = {}
+        for vehicle in equal_vehicles:
+            details = self.get_details(vehicle.id, vehicle.user)
+            total_average += details.get("total_average")
+            total_average_count += 1 if details.get("total_average") != 0 else 0
+            
+            fuel = details.get('fuels_details')
+            for index, value in fuel.iteritems():
+                fuel_values = fuels_details.get(index, None)
+                average_sum = 0.0
+                count = 0
+                if fuel_values is not None:
+                    average_sum = fuel_values.get('average_sum', 0)
+                    count = fuel_values.get('count', 0)
+                fuels_details.update({index: {"average_sum": value + average_sum,
+                                              "count": count + 1}
+                                      })
+        
+        total_average = round(total_average / total_average_count, 2) if total_average_count != 0 else 0
+        
+        for index, value in fuels_details.iteritems():
+            fuels_details.update({index: value.get('average_sum') / value.get('count')})
+        
+        return {"count": equal_vehicles.count(),
+                "total_average": total_average,
+                "fuels_details": fuels_details}
+        
     def get_details(self, vehicle_id, user):
         supplies = self.filter_by_user_vehicle(user, vehicle_id)
         
@@ -41,7 +71,7 @@ class SupplyManager(BaseManager):
                     fuels.append(next_supply.get('fuel')) 
                     if next_supply.get('is_full') is True:
                         break
-                key_dict = '/'.join(set(fuels))
+                key_dict = '/'.join(set(sorted(fuels)))
                 fuel_values = fuels_details.get(key_dict, None)
                 average_sum = 0.0
                 count = 0
@@ -54,12 +84,12 @@ class SupplyManager(BaseManager):
                                                  'count': count + 1}
                                      })
         
-        total_average = round(total_average / total_average_count, 2)
+        total_average = round(total_average / total_average_count, 2) if total_average_count != 0 else 0
         
         for index, value in fuels_details.iteritems():
             fuels_details.update({index: value.get('average_sum') / value.get('count')})
 
-        return {"total_spending": total_spending,
+        return {"total_spending": round(total_spending, 2),
                 "liters": liters,
                 "total_average": total_average,
                 "fuels_details": fuels_details}

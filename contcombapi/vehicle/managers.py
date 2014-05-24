@@ -18,3 +18,6 @@ class VehicleManager(BaseManager):
             return self.get(pk=pk, user=user)
         except ObjectDoesNotExist, e:
             raise e
+
+    def get_equal_vehicles(self, vehicle):
+        return self.filter(model=vehicle.model, manufactured=vehicle.manufactured, motor=vehicle.motor)

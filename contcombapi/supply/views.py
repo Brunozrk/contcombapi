@@ -151,15 +151,23 @@ def delete(request, id_supply):
 @renderer_classes(Renderer)
 def get_summary_by_vehicle(request, id_vehicle):
     try:
+        # Sumarry vehicle
         vehicle = Vehicle.objects.get_vehicle_by_id_and_user(id_vehicle, request.user)
         odometer = vehicle.supply_set.all().order_by('-odometer')[0].odometer
         vehicle_response = {"id": vehicle.pk, 
                            "odometer": odometer, 
                            "motor": vehicle.motor,
                            "manufactured": vehicle.manufactured}
-        
+        # Sumarry Supplies
         supplies_response = Supply.objects.get_details(id_vehicle, request.user)
-        return response_commit({'vehicle': vehicle_response, 'supplies': supplies_response})
+        
+        # Sumarry Vehicle supplies same model
+        equal_vehicles = Vehicle.objects.get_equal_vehicles(vehicle)
+        equal_vehicles_response = Supply.objects.get_detail_equal_vehicles(equal_vehicles)
+            
+        return response_commit({'vehicle': vehicle_response, 
+                                'supplies': supplies_response, 
+                                'equal_vehicles': equal_vehicles_response})
     except Exception, e:
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)     
