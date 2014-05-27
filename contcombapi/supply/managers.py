@@ -32,14 +32,16 @@ class SupplyManager(BaseManager):
                 if fuel_values is not None:
                     average_sum = fuel_values.get('average_sum', 0)
                     count = fuel_values.get('count', 0)
-                fuels_details.update({index: {"average_sum": value + average_sum,
+                fuels_details.update({
+                                      index: 
+                                             {"average_sum": value + average_sum,
                                               "count": count + 1}
                                       })
         
         total_average = round(total_average / total_average_count, 2) if total_average_count != 0 else 0
         
         for index, value in fuels_details.iteritems():
-            fuels_details.update({index: value.get('average_sum') / value.get('count')})
+            fuels_details.update({index: round(value.get('average_sum') / value.get('count'), 2)})
         
         return {"count": equal_vehicles.count(),
                 "total_average": total_average,
@@ -87,7 +89,7 @@ class SupplyManager(BaseManager):
         total_average = round(total_average / total_average_count, 2) if total_average_count != 0 else 0
         
         for index, value in fuels_details.iteritems():
-            fuels_details.update({index: value.get('average_sum') / value.get('count')})
+            fuels_details.update({index: round(value.get('average_sum') / value.get('count'), 2)})
 
         return {"total_spending": round(total_spending, 2),
                 "liters": liters,
@@ -140,8 +142,3 @@ class SupplyManager(BaseManager):
     
 def calculate_average(diff_odometer, liters):
     return round((diff_odometer) / (liters), 2)
-
-    
-    
-        
-        
