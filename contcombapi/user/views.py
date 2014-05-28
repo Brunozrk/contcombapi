@@ -23,7 +23,7 @@ from rest_framework.decorators import api_view, renderer_classes, \
     authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from contcombapi.user.models import User
-from contcombapi.user.serializers import SaveSerializer
+from contcombapi.user.serializers import SaveSerializer, UpdateSerializer
 from contcombapi.utility import is_valid_int_greater_zero_param, clone
 from contcombapi.validators.validators import validate_required
 import logging
@@ -68,7 +68,7 @@ def update(request):
 
         user = User.objects.get_by_pk(request.user.id)
 
-        serializer = SaveSerializer(clone(user), data=request.DATA, partial=True)
+        serializer = UpdateSerializer(clone(user), data=request.DATA)
 
         if serializer.is_valid():
 
