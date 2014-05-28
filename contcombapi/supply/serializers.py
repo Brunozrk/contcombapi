@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class SaveSerializer(serializers.Serializer):
 
-    vehicle = serializers.IntegerField(required=True)
+    vehicle = serializers.IntegerField(required=True, min_value=0)
     odometer = serializers.FloatField(required=True)
     is_full = serializers.BooleanField(required=True)
     date = serializers.CharField(required=True)

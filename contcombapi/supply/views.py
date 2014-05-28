@@ -22,6 +22,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from contcombapi.messages import error_messages
 from contcombapi.supply.models import Supply
 from contcombapi.supply.serializers import SaveSerializer
+from contcombapi.exception.serializer.ObjectDoesNotExistExceptionSerializer import ObjectDoesNotExistExceptionSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +48,9 @@ def save(request):
             logger.error(serializer.errors)
             return ValidationExceptionSerializer.response_exception(serializer.errors)
  
+    except ObjectDoesNotExist, e:
+        logger.error(e)
+        return ObjectDoesNotExistExceptionSerializer.response_exception(e.message)
     except Exception, e:
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)
@@ -79,7 +83,7 @@ def update(request):
  
     except ObjectDoesNotExist, e:
         logger.error(e)
-        return ServiceExceptionSerializer.response_exception(error_messages.get("invalid") % u"Abastecimento")
+        return ObjectDoesNotExistExceptionSerializer.response_exception(e.message)
     except Exception, e:
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)
