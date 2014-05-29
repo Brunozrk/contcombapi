@@ -23,7 +23,6 @@ from contcombapi.messages import error_messages
 from contcombapi.supply.models import Supply
 from contcombapi.supply.serializers import SaveSerializer
 from contcombapi.exception.serializer.ObjectDoesNotExistExceptionSerializer import ObjectDoesNotExistExceptionSerializer
-
 logger = logging.getLogger(__name__)
 
 @log
@@ -157,7 +156,9 @@ def get_summary_by_vehicle(request, id_vehicle):
     try:
         # Sumarry vehicle
         vehicle = Vehicle.objects.get_vehicle_by_id_and_user(id_vehicle, request.user)
-        odometer = vehicle.supply_set.all().order_by('-odometer')[0].odometer
+        supplies = vehicle.supply_set.all().order_by('-odometer')
+        odometer = supplies[0].odometer if supplies else 0
+
         vehicle_response = {"id": vehicle.pk, 
                            "odometer": odometer, 
                            "motor": vehicle.motor,
