@@ -42,11 +42,16 @@ class SaveSerializer(serializers.Serializer):
             instance.fuel_price = attrs.get('fuel_price', instance.fuel_price)
             instance.obs = attrs.get('obs', instance.obs)
 
+            instance.total_spending = get_total_spending(instance.liters, instance.fuel_price)
+
             return instance
         
         attrs['vehicle'] = Vehicle.objects.get_by_pk(pk=attrs['vehicle'])
         attrs['date'] = datetime.datetime.strptime(attrs['date'], "%d/%m/%Y").date()
         attrs['fuel'] = Fuel.objects.get_by_pk(pk=attrs['fuel'])
         supply = Supply(**attrs)
-        supply.total_spending = supply.liters * supply.fuel_price
+        supply.total_spending = get_total_spending(supply.liters, supply.fuel_price) 
         return supply
+
+def get_total_spending(liters, fuel_price):
+    return liters * fuel_price
