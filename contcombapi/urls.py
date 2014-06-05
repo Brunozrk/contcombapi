@@ -41,6 +41,7 @@ urlpatterns += patterns('contcombapi.vehicle.views',
     url(r'^vehicle/delete/(?P<id_car>[^/]+)$', 'delete'),
     url(r'^vehicle/get_models$', 'get_models'),
     url(r'^vehicle/fuel/get/user$', 'get_vehicle_fuel_by_user'),
+    url(r'^vehicle/ranking$', 'get_ranking'),
 )
 
 urlpatterns += patterns('contcombapi.supply.views',

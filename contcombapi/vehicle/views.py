@@ -21,7 +21,7 @@ from contcombapi.exception.serializer.ServiceExceptionSerializer import ServiceE
 from contcombapi.utility import clone
 from django.core.exceptions import ObjectDoesNotExist
 from contcombapi.messages import error_messages
-from contcombapi.supply.models import Fuel
+from contcombapi.supply.models import Fuel, Supply
 
 logger = logging.getLogger(__name__)
 
@@ -181,3 +181,32 @@ def get_models(request):
     except Exception, e:
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)
+    
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['GET'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def get_ranking(request):
+ 
+    try:
+        ranking = list()
+        vehicles = Vehicle.objects.values('model', 'manufactured', 'motor').distinct()
+        for vehicle in vehicles:
+            equal_vehicles = Vehicle.objects.get_equal_vehicles(vehicle.get('model'), 
+                                                                vehicle.get('manufactured'),
+                                                                vehicle.get('motor'))
+            ranking.append({
+                            "vehicle": str(Model.objects.get_by_pk(pk=vehicle.get('model'))) + " - " + str(vehicle.get('motor')) + " - " + str(vehicle.get('manufactured')),
+                            "details": Supply.objects.get_detail_equal_vehicles(equal_vehicles), 
+                            })
+        ranking = sorted(ranking, key=lambda k: k['details']['total_average'], reverse=True) 
+        return response_commit({'ranking': ranking})
+     
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
+

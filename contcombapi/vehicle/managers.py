@@ -5,6 +5,12 @@
 from contcombapi.manager.BaseManager import BaseManager
 from django.core.exceptions import ObjectDoesNotExist
 
+class ModelManager(BaseManager):
+    '''
+        Base class for managing the operations to database
+    '''
+    
+
 class VehicleManager(BaseManager):
     '''
         Base class for managing the operations to database
@@ -19,5 +25,8 @@ class VehicleManager(BaseManager):
         except ObjectDoesNotExist, e:
             raise e
 
-    def get_equal_vehicles(self, vehicle):
-        return self.filter(model=vehicle.model, manufactured=vehicle.manufactured, motor=vehicle.motor)
+    #def get_equal_vehicles(self, vehicle):
+    #    return self.filter(model=vehicle.model, manufactured=vehicle.manufactured, motor=vehicle.motor)
+
+    def get_equal_vehicles(self, model, manufactured, motor):
+        return self.filter(model=model, manufactured=manufactured, motor=motor)

@@ -167,7 +167,7 @@ def get_summary_by_vehicle(request, id_vehicle):
         supplies_response = Supply.objects.get_details(id_vehicle, request.user)
         
         # Sumarry Vehicle supplies same model
-        equal_vehicles = Vehicle.objects.get_equal_vehicles(vehicle)
+        equal_vehicles = Vehicle.objects.get_equal_vehicles(vehicle.model, vehicle.manufactured, vehicle.motor)
         equal_vehicles_response = Supply.objects.get_detail_equal_vehicles(equal_vehicles)
             
         return response_commit({'vehicle': vehicle_response, 
