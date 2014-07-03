@@ -51,5 +51,6 @@ urlpatterns += patterns('contcombapi.supply.views',
     url(r'^supply/get/(?P<id_supply>[^/]+)$', 'get_by_id'),
     url(r'^supply/delete/(?P<id_supply>[^/]+)$', 'delete'),
     url(r'^supply/get/summary/(?P<id_vehicle>[^/]+)$', 'get_summary_by_vehicle'),
+    url(r'^supply/import/old$', 'import_old_contcomb'),
     
 )

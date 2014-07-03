@@ -5,10 +5,15 @@
 from contcombapi.manager.BaseManager import BaseManager
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class FuelManager(BaseManager):
     '''
         Base class for managing the operations to database
     '''
+
+    def get_first_fuel(self):
+        return self.all()[0].id
+
 
 class SupplyManager(BaseManager):
     '''

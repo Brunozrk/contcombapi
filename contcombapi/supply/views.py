@@ -20,9 +20,11 @@ from contcombapi.exception.serializer.ServiceExceptionSerializer import ServiceE
 from contcombapi.utility import clone
 from django.core.exceptions import ObjectDoesNotExist
 from contcombapi.messages import error_messages
-from contcombapi.supply.models import Supply
+from contcombapi.supply.models import Supply, Fuel
 from contcombapi.supply.serializers import SaveSerializer
+from contcombapi.vehicle.serializers import SaveSerializer as SaveVehicleSerializer
 from contcombapi.exception.serializer.ObjectDoesNotExistExceptionSerializer import ObjectDoesNotExistExceptionSerializer
+import json
 logger = logging.getLogger(__name__)
 
 @log
@@ -176,21 +178,61 @@ def get_summary_by_vehicle(request, id_vehicle):
     except Exception, e:
         logger.error(e)
         return ServiceExceptionSerializer.response_exception(e.message)     
- 
-# @log
-# @commit_manually
-# @commit_or_rollback
-# @api_view(['GET'])
-# @authentication_classes((BasicAuthentication,))
-# @permission_classes((IsAuthenticated,))
-# @renderer_classes(Renderer)
-# def get_models(request):
-#  
-#     try:
-#         models = Model.objects.filter(valid=True).values_list("name", flat=True)
-#          
-#         return response_commit({'models': models})
-#      
-#     except Exception, e:
-#         logger.error(e)
-#         return ServiceExceptionSerializer.response_exception(e.message)
+
+
+@log
+@commit_manually
+@commit_or_rollback
+@api_view(['POST'])
+@authentication_classes((BasicAuthentication,))
+@permission_classes((IsAuthenticated,))
+@renderer_classes(Renderer)
+def import_old_contcomb(request):
+    
+    try:
+        # # Please, refactor this code! :S
+        
+        # Save vehicle first...
+        serializer = SaveVehicleSerializer(data=request.DATA)
+
+        if serializer.is_valid():
+
+            vehicle = serializer.object
+            vehicle.user = request.user
+            vehicle.save()
+            
+            supplies = json.loads(request.DATA.get('supplies'))
+            current_odometer = int(request.DATA.get('km_atual'))
+            
+            # Iterate supplies...
+            for supply in supplies:
+                
+                # Set default values...
+                supply['fuel'] = Fuel.objects.get_first_fuel()
+                supply['fuel_price'] = 2
+                supply['vehicle'] = vehicle.id
+                supply['station'] = ''
+                supply['is_full'] = True
+                current_odometer -=  int(supply['odometer'])
+                supply['odometer'] = current_odometer
+
+                # Save supply
+                serializer = SaveSerializer(data=supply)
+
+                if serializer.is_valid():
+
+                    supply = serializer.object
+                    supply.save()
+                else:
+                    logger.error(serializer.errors)
+                    return ValidationExceptionSerializer.response_exception(serializer.errors)
+                
+            return response_commit({})
+        else:
+            logger.error(serializer.errors)
+            return ValidationExceptionSerializer.response_exception(serializer.errors)
+
+    except Exception, e:
+        logger.error(e)
+        return ServiceExceptionSerializer.response_exception(e.message)
+    
