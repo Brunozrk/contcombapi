@@ -213,7 +213,7 @@ def import_old_contcomb(request):
                 supply['vehicle'] = vehicle.id
                 supply['station'] = ''
                 supply['is_full'] = True
-                current_odometer -=  int(supply['odometer'])
+                current_odometer -=  float(supply['odometer'])
                 supply['odometer'] = current_odometer
 
                 # Save supply
