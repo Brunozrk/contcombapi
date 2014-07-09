@@ -20,16 +20,27 @@ def validate_integer(value):
     except (TypeError, ValueError):
         raise ValidationError(messages.get('integer'))
 
+def validate_float(value):
+    try:
+        float(value)
+    except (TypeError, ValueError):
+        raise ValidationError(messages.get('float'))
 
 def validate_greater_zero(value):
     if int(value) <= 0:
         raise ValidationError(messages.get('greater_zero'))
 
-
 def validate_greater_equal_zero(value):
     if int(value) < 0:
         raise ValidationError(messages.get('greater_equal_zero'))
 
+def validate_float_greater_zero(value):
+    if float(value) <= 0:
+        raise ValidationError(messages.get('greater_float_zero'))
+
+def validate_float_greater_equal_zero(value):
+    if float(value) < 0:
+        raise ValidationError(messages.get('greater_equal_zero'))
 
 def validate_string(value):
     if not isinstance(value, basestring):

@@ -4,7 +4,7 @@
 '''
 
 from contcombapi.authentication.authentication import BasicAuthentication
-from contcombapi.vehicle.models import Vehicle, Model
+from contcombapi.vehicle.models import Vehicle
 from contcombapi.db.transaction import response_commit
 from contcombapi.decorator.Log import log
 from contcombapi.decorator.Transaction import commit_or_rollback
@@ -17,8 +17,8 @@ import logging
 from django.forms.models import model_to_dict
 from contcombapi.exception.serializer.ValidationExceptionSerializer import ValidationExceptionSerializer
 from contcombapi.exception.serializer.ServiceExceptionSerializer import ServiceExceptionSerializer
-from contcombapi.utility import clone
-from django.core.exceptions import ObjectDoesNotExist
+from contcombapi.utility import clone, is_valid_float_greater_zero_param
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from contcombapi.messages import error_messages
 from contcombapi.supply.models import Supply, Fuel
 from contcombapi.supply.serializers import SaveSerializer
@@ -202,7 +202,15 @@ def import_old_contcomb(request):
             vehicle.save()
             
             supplies = json.loads(request.DATA.get('supplies'))
-            current_odometer = float(request.DATA.get('current_km')) - float(request.DATA.get('walked_km'))
+            current_km = request.DATA.get('current_km')
+            walked_km = request.DATA.get('walked_km')
+
+            # Validations
+            is_valid_float_greater_zero_param(supplies)
+            is_valid_float_greater_zero_param(supplies)
+            is_valid_float_greater_zero_param(supplies)
+
+            current_odometer = float(current_km) - float(walked_km)
 
             # Iterate supplies...
             for supply in supplies:

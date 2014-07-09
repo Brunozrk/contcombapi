@@ -8,6 +8,8 @@ from validators.validators import validate_required, validate_integer, \
     validate_greater_zero, validate_greater_equal_zero, validate_string_is_empty, \
     validate_string_maxsize, validate_string_minsize, validate_boolean
 import re
+from contcombapi.validators.validators import validate_float,\
+    validate_float_greater_zero
 
 def is_valid_required_param(param):
     '''Checks if the parameter is valid.
@@ -45,6 +47,21 @@ def is_valid_int_greater_zero_param(param, required=True):
     validate_integer(param)
 
     validate_greater_zero(param)
+
+
+def is_valid_float_greater_zero_param(param, required=True):
+    '''Checks if the parameter is a valid float value and greater than zero.
+
+    @param param: Value to be validated.
+
+    @raise ValidationError: If there is validation error in the field
+    '''
+    if required:
+        validate_required(param)
+
+    validate_float(param)
+
+    validate_float_greater_zero(param)
 
 
 def is_valid_int_greater_equal_zero_param(param):
