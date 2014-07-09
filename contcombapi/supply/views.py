@@ -202,8 +202,8 @@ def import_old_contcomb(request):
             vehicle.save()
             
             supplies = json.loads(request.DATA.get('supplies'))
-            current_odometer = int(request.DATA.get('km_atual'))
-            
+            current_odometer = float(request.DATA.get('current_km')) - float(request.DATA.get('walked_km'))
+
             # Iterate supplies...
             for supply in supplies:
                 
@@ -213,16 +213,18 @@ def import_old_contcomb(request):
                 supply['vehicle'] = vehicle.id
                 supply['station'] = ''
                 supply['is_full'] = True
-                current_odometer -=  float(supply['odometer'])
+
+                # Set values
+                last_odometer = float(supply['odometer'])
                 supply['odometer'] = current_odometer
 
                 # Save supply
                 serializer = SaveSerializer(data=supply)
 
                 if serializer.is_valid():
-
-                    supply = serializer.object
-                    supply.save()
+                    supply_obj = serializer.object
+                    supply_obj.save()
+                    current_odometer -=  last_odometer
                 else:
                     logger.error(serializer.errors)
                     return ValidationExceptionSerializer.response_exception(serializer.errors)
