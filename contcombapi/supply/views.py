@@ -201,14 +201,13 @@ def import_old_contcomb(request):
             vehicle.user = request.user
             vehicle.save()
             
-            supplies = json.loads(request.DATA.get('supplies'))
+            supplies = json.loads(request.DATA.get('supplies'), strict=False)
             current_km = request.DATA.get('current_km')
             walked_km = request.DATA.get('walked_km')
 
             # Validations
-            is_valid_float_greater_zero_param(supplies)
-            is_valid_float_greater_zero_param(supplies)
-            is_valid_float_greater_zero_param(supplies)
+            is_valid_float_greater_zero_param(current_km)
+            is_valid_float_greater_zero_param(walked_km)
 
             current_odometer = float(current_km) - float(walked_km)
 
